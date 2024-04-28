@@ -27,3 +27,15 @@ class YoutubeProcessor:
             logger.info(f"Author : {author} , Length : {length} , Title : {title} , Total Size : {total_size}")
         
         return result
+    
+class GeminiProcessor:
+    def __init__(self,model_name,project):
+        self.model = VertexAI(model_name = model_name, project = project)
+
+    def generate_document_summary(self,documents: list, **args):
+        chain_type = "map_reduce" if len(documents) > 10 else "stuff"
+        chain = load_summarize_chain(
+            llm = self.model,
+            chain_type = chain_type,
+            **args)
+        return chain.run(documents)
