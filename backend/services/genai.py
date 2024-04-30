@@ -29,9 +29,9 @@ class GeminiProcessor:
     def count_total_token(self, docs: list):
         temp_model = GenerativeModel("gemini-1.0-pro")
         total = 0
-        logger.info("Counting total tokens..")
+        logger.info("Counting total billable characters..")
         for doc in tqdm(docs):
-            total += temp_model.count_tokens(doc.page_content).total_tokens
+            total += temp_model.count_tokens(doc.page_content).total_billable_characters
         return total        
     
     def get_model(self):
@@ -55,13 +55,14 @@ class YoutubeProcessor:
         length = result[0].metadata['length']
         title = result[0].metadata['title']
         total_size = len(result)
+        total_billable_characters = self.GeminiProcessor.count_total_token(result)
 
         if verbose:            
-            logger.info(f"Author : {author} , Length : {length} , Title : {title} , Total Size : {total_size}")
+            logger.info(f"Author : {author} , Length : {length} , Title : {title} , Total Size : {total_size} , Total Billable Characters : {total_billable_characters}")
         
         return result
     
-    def find_key_concepts(self,documents: list, group_size: int = 2):
+    def find_key_concepts(self,documents: list, group_size: int = 2, verbose = False):
         if group_size > len(documents) :
             raise ValueError("Group Size is larger than the number of documents")
         
@@ -74,6 +75,7 @@ class YoutubeProcessor:
 
         # Finding Key Concepts :
         batch_concepts = []
+        batch_cost = 0
 
         logger.info("Finding Key Concepts ...")
 
@@ -97,7 +99,27 @@ class YoutubeProcessor:
             chain = prompt | self.GeminiProcessor.model
 
             # Chain Execution 
-            concept = chain.invoke({"text":group_content})
-            batch_concepts.append(concept)
+            output_concept = chain.invoke({"text":group_content})
+            batch_concepts.append(output_concept)
 
+            if verbose:
+                
+                total_input_char = len(group_content)
+                total_input_cost = (total_input_char/1000) * 0.000125
+
+                logging.info(f"Running chain on {len(group)} documents")
+                logging.info(f"Total Input Characters : {total_input_char}")
+                logging.info(f"Total Cost : $ {total_input_cost}")
+
+                total_output_char = len(output_concept)
+                total_output_cost = (total_output_char/1000) * 0.000375
+
+                logging.info(f"Total Output Characters : {total_output_char}")
+                logging.info(f"Total Cost : $ {total_output_cost}")
+
+                batch_cost = total_input_cost + total_output_cost
+
+                logging.info(f"Total Group Cost : $ {batch_cost}")
+
+        logging.info(f"Total Analysis Cost: {batch_cost}")
         return batch_concepts
