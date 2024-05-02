@@ -99,13 +99,14 @@ class YoutubeProcessor:
 
             # Prompt Template for finding Key Concepts :
             prompt = PromptTemplate(
-                template = """ 
-                Find and define key concepts or terms found in the text : 
+                template = """
+                Find and define key concepts or terms found in the text:
                 {text}
-                Respond in the following format as a JSON object so that I can use json.load on it without any errors of expecting value, separating each concept with a comma:
+                
+                Respond in the following format as a JSON object without any backticks separating each concept with a comma:
                 {{"concept": "definition", "concept": "definition", ...}}
                 """,
-                input_variables = ["text"]
+                input_variables=["text"]
             )
 
             # Chain creation
@@ -139,5 +140,15 @@ class YoutubeProcessor:
         concepts = [(concept) for concept in batch_concepts]
         print(f"{concepts}")
         # processed_concepts = [json.loads(concept) for concept in batch_concepts]
+        processed_concepts = []
+        for concept in batch_concepts:
+            try:
+                concept_json = json.loads(concept)
+                processed_concepts.append(concept_json)
+            except json.JSONDecodeError as e :
+                print("Error decoding JSON", e)
+
+
+
         logging.info(f"Total Analysis Cost: {batch_cost}")
-        return batch_concepts
+        return processed_concepts
