@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Flashcard from './Flashcard.jsx';
-import './Flashcard.css'
+import './Flashcard.css';
 
 function App(){
   const [youtubeLink, setYoutubeLink] = useState("");
   const [keyConcepts, setKeyConcepts] = useState([]);
+
   const handleLinkChange = (event) => {
     setYoutubeLink(event.target.value);
   };
@@ -15,8 +16,15 @@ function App(){
         youtube_link : youtubeLink,
      });
      const data = response.data;
-     if(data.keyConcepts && Array.isArray(data.key_concepts)){
-      setKeyConcepts(data.key_concepts);
+     
+     console.log(data.key_concepts);
+     if(data.key_concepts && Array.isArray(data.key_concepts)){
+      const transformedConcepts = data.key_concepts.map(concept => {
+        const term = Object.keys(concept)[0];
+        const definition = concept[term];
+        return {term,definition};
+      });
+      setKeyConcepts(transformedConcepts);
      }
      else{
       console.error("Data does not contain Key Concepts :",data);
@@ -47,12 +55,12 @@ function App(){
       </div>
       <div className='flashCardsContainer'>
         {keyConcepts.map((concept,index) => {
-          <FlashCard
+          <Flashcard
             key = {index}
             term = {concept.term}
             definition = {concept.definition}
             onDiscard = {() => discardFlashcard(index)}
-            ></FlashCard>
+            />
         })}
       </div>
     </div>

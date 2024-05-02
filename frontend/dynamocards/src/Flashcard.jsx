@@ -1,6 +1,6 @@
 import React from 'react';
 
-function FlashCard({term , definition, onDiscard}){
+function Flashcard({term , definition, onDiscard}){
     return (
         <div className='flashcard'>
             <h3>{term}</h3>
@@ -11,4 +11,4 @@ function FlashCard({term , definition, onDiscard}){
         </div>
     )
 }
-export default FlashCard
+export default Flashcard
