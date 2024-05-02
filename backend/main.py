@@ -33,8 +33,15 @@ def analyze_video(request: VideoAnalysisRequest):
     #Find Key Concepts : 
     key_concepts = processor.find_key_concepts(result,verbose=True)
     
+    key_concept_list = {}
+    for concept_dict in key_concepts:
+        for key,value in concept_dict.items():
+            key_concept_list[key] = value
+
+    key_concepts_result = [{key:value} for key,value in concept_dict.items()]
+
     return {
-        "key_concepts" : key_concepts
+        "key_concepts" : key_concepts_result
     }
 
 @app.get("/root")
