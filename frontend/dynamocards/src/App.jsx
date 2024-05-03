@@ -54,14 +54,14 @@ function App(){
       </button>
       </div>
       <div className='flashCardsContainer'>
-        {keyConcepts.map((concept,index) => {
+        {keyConcepts.map((concept,index) => (
           <Flashcard
             key = {index}
             term = {concept.term}
             definition = {concept.definition}
             onDiscard = {() => discardFlashcard(index)}
             />
-        })}
+        ))}
       </div>
     </div>
   );
