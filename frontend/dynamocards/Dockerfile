@@ -1,14 +1,13 @@
-FROM node:14-alpine AS frontend
+FROM node:16-alpine
 
-WORKDIR /app/frontend
+WORKDIR /app
 
-COPY frontend/package.json frontend/package-lock.json /app/frontend
+
+COPY . /app
+
+
+EXPOSE 5173
 RUN npm install
 
-COPY  ./app/frontend
-
-WORKDIR /app/frontend/dynamocards
-
-EXPOSE 3000
-
-CMD["npm","run","dev"]
+RUN npm run build
+CMD ["npm", "run", "dev"]

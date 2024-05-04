@@ -1,15 +1,10 @@
 FROM python:3.9-slim AS backend
-ENV PYTHONDONTWRITEBYTECOODE 1
-ENV PYTHONBUFFERED 1
-WORKDIR /app/backend
 
-COPY requirements.txt /app/backend/
-RUN python -m venv env && \
-    .env/bin/activate && \
-    pip install --no-cache-dir -r requirements.txt
+WORKDIR /app
 
-COPY ./app/backend
+COPY . /app
 
-EXPOSE 8008
+RUN pip install --no-cache-dir -r requirements.txt
+ENV GOOGLE_APPLICATION_CREDENTIALS="authentication.json"
 
-CMD .env/bin/activate && uvicorn main:app -host 0.0.0.0 --port 8000
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]

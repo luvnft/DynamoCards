@@ -1,4 +1,3 @@
-version : '3.8'
 
 services:
   frontend:
@@ -20,5 +19,3 @@ services:
       - "8000:8000"
     volumes:
       - ./backend:/app/backend
-    environments:
-      - GOOGLE_APPLICATION_CREDENTIALS=/app/authentication.json

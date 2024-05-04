@@ -8,3 +8,4 @@ tiktoken
 fastapi
 uvicorn
 tqdm
+python-dotenv
