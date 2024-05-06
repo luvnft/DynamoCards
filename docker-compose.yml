@@ -1,0 +1,10 @@
+version: '3'
+services:
+  frontend:
+    image: my-frontend-image:latest
+    ports:
+      - 5173:5173
+  backend:
+    image: my-backend-image:latest
+    ports:
+      - 8000:8000
