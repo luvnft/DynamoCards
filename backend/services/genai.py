@@ -4,6 +4,8 @@ from langchain_google_vertexai import VertexAI
 from vertexai.generative_models import GenerativeModel
 from langchain.chains.summarize import load_summarize_chain
 from langchain.prompts import PromptTemplate
+from langchain_core.pydantic_v1 import BaseModel, Field
+from langchain_core.output_parsers import JsonOutputParser
 import json
 import logging
 from tqdm import tqdm
@@ -11,7 +13,10 @@ from tqdm import tqdm
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
+class Concepts_Defintions(BaseModel):
+    concepts: str = Field(description="Term or Key Concept for the flashcard.")
+    definition: str = Field(description = "Definition of the key concept for the flashcard")
+    
 
 class GeminiProcessor:
     
