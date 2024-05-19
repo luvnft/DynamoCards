@@ -33,7 +33,7 @@ In the front end, App.jsx , sendLink method is modified to set the key_concepts 
 ## Task 11: Adding Memory Cache 
 In the main.py we now first check if the following video_url has been previously analyzed or not by checking the video_analysis.db if the following database doesn’t have the video_url then we have to find the key concepts and definition and if the following video url is available in the database then we retrieve the key concepts and definition from the database.
 
-##Task 12 : Docker for the frontend and backend
+## Task 12 : Docker for the frontend and backend
 Under the frontend directory, a Dockerfile that helps in copying applications files to the container, installing Node.js dependencies and builds the application, exposes the port 5173 for external excess and starts the application using the development server.
 Under the frontend directory, a Dockerfile that helps in copying applications files to the container, installing Python dependencies from a requirements.txt file, setting up an environment variable for Google application credentials , exposes the port 8000 for external excess and starts the application using Uvicorn with auto-reload enabled for development.
 Other than this, we use docker compose which allows both services to run in separate containers and communicate with specified port mappings.
