@@ -12,7 +12,7 @@ function App(){
   };
   const sendLink  = async () => {
     try {
-      const response = await axios.post("http://localhost:8000/analyze_video", {
+      const response = await axios.post("https://cards-six-puce.vercel.app/analyze_video", {
         youtube_link : youtubeLink,
      });
      const data = response.data;
